@@ -1,4 +1,4 @@
-# pic24f-dspic33-hello-world-uart
+# pic24f-hello-world-uart
 
 ![image](images/explorer16_32_dev_board.jpg)
 
@@ -9,9 +9,7 @@ This is the demo software which runs on Explorer 16/32 Development Board. The Ex
 
 # Related Documentation
 
-This is a simple Hello world application which prints the string "Hello World" continuously on the serial terminal. This application is configured to work with PIC24 and dsPIC33 devices. 
-There are 2 configurations available namedly pic24f and dspic33. When pic24f configuration is selected, "PIC24FJ1024GB610" is selected as the target device and when dspic33 configuration 
-is selected, dsPIC33CK256MP508 device is selected as the target device.  
+This is a simple Hello world application which prints the string "Hello World" continuously on the serial terminal. 
 
 
 # Software Used 

@@ -7,7 +7,6 @@ pipeline {
         }
     }
 
-
 	environment {		
 	    NOTIFICATION_EMAIL = 'e50beea8.microchip.com@amer.teams.ms'
 		GITHUB_URL ='https://github.com/mchpTestArea'
