@@ -9,25 +9,25 @@ This is the demo software which runs on Explorer 16/32 Development Board. The Ex
 
 # Related Documentation
 
-This is a simple Hello world application which prints the string "Hello World" continuously on the serial terminal. 
+This is a simple Hello world application which prints the string "Hello World !!!" continuously on the serial terminal. 
 
 
 # Software Used 
 
-MPLAB® X IDE v5.35 or newer (https://www.microchip.com/mplabx)
-MPLAB® XC16 v1.50 or newer (https://www.microchip.com/xc) 
-Any of the serial terminal application. Example: Teraterm(https://ttssh2.osdn.jp/index.html.en)
+- MPLAB® X IDE v5.35 or newer (https://www.microchip.com/mplabx)
+- MPLAB® XC16 v1.50 or newer (https://www.microchip.com/xc) 
+- Any of the serial terminal application. Example: Teraterm(https://ttssh2.osdn.jp/index.html.en)
 
 
 # Hardware Used
 
-Explorer 16/32 Development (https://www.microchip.com/DevelopmentTools/ProductDetails/DM240001-2)
-MCP2200 USB to RS232 Demo Board (https://www.microchip.com/DevelopmentTools/ProductDetails/PartNO/MCP2200EV-VCP)
+- Explorer 16/32 Development Board(https://www.microchip.com/DM240001-2)
+- Micro USB Cable
 
 
 # Setup
 
-Connect the MCP2200 USB to RS232 Demo Board to the serial connector(J40) in the Explorer 16/32 Development Board. 
+Connect the Micro USB Cable to the serial connector(J40) in the Explorer 16/32 Development Board. 
 
 
 # Operation
