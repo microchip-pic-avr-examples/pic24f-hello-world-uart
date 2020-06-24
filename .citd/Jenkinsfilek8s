@@ -82,7 +82,7 @@ pipeline {
                     def asString = topics.join(", ")
                     asString = asString.replace("\n", "").replace(" ", "").replace("\t", "").replace("\r", "")
 					// If the organization is other than 'mchpTestArea" create the repo with public visibility.
-					env.VISIBILITY_FLAG = env.GITHUB_URL.contains('mchpTestArea') }
+					env.VISIBILITY_FLAG = env.GITHUB_URL.contains('mchpTestArea')
                     
                     withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIAL_ID}", passwordVariable: 'PASS', usernameVariable: 'USER_NAME')]) {
                         execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -rpo=true -gpat=$PASS -rporg=${env.GITHUB_URL} -rpn=${jsonObj.content.projectName} -rpd=\"${jsonObj.content.shortDescription}\" -rpt=${asString} -rpp=${env.VISIBILITY_FLAG}")
