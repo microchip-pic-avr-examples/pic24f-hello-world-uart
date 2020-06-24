@@ -23,6 +23,8 @@ pipeline {
 		GITHUB_URL ='https://github.com/mchpTestArea'
 		//This is the BitBucket repo URL which we want to deploy
 		BITBUCKET_URL = 'https://bitbucket.microchip.com/scm/citd/sandbox_repo.git'	
+		//Flag to decide the repo visibility.
+		VISIBILITY_FLAG = true
 		GITHUB_CREDENTIAL_ID = 'GITHUB_PIC_AVR_TEST_TOKEN'
 		CHANGE_LOG_PATH = 'changelog.md'
 		SOURCE_PROJECT_META_DATA = '.main-meta/main.json'
@@ -80,10 +82,10 @@ pipeline {
                     def asString = topics.join(", ")
                     asString = asString.replace("\n", "").replace(" ", "").replace("\t", "").replace("\r", "")
 					// If the organization is other than 'mchpTestArea" create the repo with public visibility.
-					expression { params.REPO_VISIBILITY = env.GITHUB_URL.contains('mchpTestArea') }
+					env.VISIBILITY_FLAG = env.GITHUB_URL.contains('mchpTestArea') }
                     
                     withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIAL_ID}", passwordVariable: 'PASS', usernameVariable: 'USER_NAME')]) {
-                        execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -rpo=true -gpat=$PASS -rporg=${env.GITHUB_URL} -rpn=${jsonObj.content.projectName} -rpd=\"${jsonObj.content.shortDescription}\" -rpt=${asString} -rpp=${params.REPO_VISIBILITY}")
+                        execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -rpo=true -gpat=$PASS -rporg=${env.GITHUB_URL} -rpn=${jsonObj.content.projectName} -rpd=\"${jsonObj.content.shortDescription}\" -rpt=${asString} -rpp=${env.VISIBILITY_FLAG}")
                     }
                 }
             }
@@ -105,16 +107,17 @@ pipeline {
                     def jsonObj = readJsonObject();
                     def gitHubUrl = "${env.GITHUB_URL}" + "/" + jsonObj.content.projectName
                     gitHubUrl = gitHubUrl.replace(" ", "").replace("\n", "")
-					expression { params.IS_TESTING_AREA = env.GITHUB_URL.contains('mchpTestArea') }
+					env.VISIBILITY_FLAG = env.GITHUB_URL.contains('mchpTestArea')
                     
                     withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIAL_ID}", passwordVariable: 'PASS', usernameVariable: 'USER_NAME')]) {
       				    // If the organization is "mchpTestArea" change the visibility to public before deploy
-						if(params.IS_TESTING_AREA == true)
+						if(env.VISIBILITY_FLAG == true)
                         execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -rpu=true -gpat=$PASS -rporg=${env.GITHUB_URL} -rpn=${jsonObj.content.projectName} -rpp=false")
 					    
                         execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -deploy=true -gpat=$PASS -dgid=$USER_NAME -dburl=${env.BITBUCKET_URL} -dgurl=${gitHubUrl}  -dbranch=master")
+						
 						// If the organization is "mchpTestArea" change the visibility to private after deploy
-						if(params.IS_TESTING_AREA == true)
+						if(env.VISIBILITY_FLAG == true)
                         execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -rpu=true -gpat=$PASS -rporg=${env.GITHUB_URL} -rpn=${jsonObj.content.projectName} -rpp=true")
                     }
                 }
