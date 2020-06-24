@@ -22,9 +22,9 @@ pipeline {
 		//Update this URL based on where(which organization) it needs to be deployed
 		GITHUB_URL ='https://github.com/mchpTestArea'
 		//This is the BitBucket repo URL which we want to deploy
-		BITBUCKET_URL = 'https://bitbucket.microchip.com/scm/citd/sandbox_repo.git'	
-		//Flag to decide the repo visibility.
-		VISIBILITY_FLAG = true
+		BITBUCKET_URL = 'https://bitbucket.microchip.com/scm/mcu16ce/pic24f-hello-world-uart.git'	
+		//Flag to decide the repo visibility. If the Organization is 'mchpTestArea' then set the visibility to private.
+		VISIBILITY_FLAG =  env.GITHUB_URL.contains('mchpTestArea')
 		GITHUB_CREDENTIAL_ID = 'GITHUB_PIC_AVR_TEST_TOKEN'
 		CHANGE_LOG_PATH = 'changelog.md'
 		SOURCE_PROJECT_META_DATA = '.main-meta/main.json'
@@ -81,8 +81,6 @@ pipeline {
                     String [] topics = jsonObj.content.keywords
                     def asString = topics.join(", ")
                     asString = asString.replace("\n", "").replace(" ", "").replace("\t", "").replace("\r", "")
-					// If the organization is other than 'mchpTestArea" create the repo with public visibility.
-					env.VISIBILITY_FLAG = env.GITHUB_URL.contains('mchpTestArea')
                     
                     withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIAL_ID}", passwordVariable: 'PASS', usernameVariable: 'USER_NAME')]) {
                         execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -rpo=true -gpat=$PASS -rporg=${env.GITHUB_URL} -rpn=${jsonObj.content.projectName} -rpd=\"${jsonObj.content.shortDescription}\" -rpt=${asString} -rpp=${env.VISIBILITY_FLAG}")
@@ -107,7 +105,6 @@ pipeline {
                     def jsonObj = readJsonObject();
                     def gitHubUrl = "${env.GITHUB_URL}" + "/" + jsonObj.content.projectName
                     gitHubUrl = gitHubUrl.replace(" ", "").replace("\n", "")
-					env.VISIBILITY_FLAG = env.GITHUB_URL.contains('mchpTestArea')
                     
                     withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIAL_ID}", passwordVariable: 'PASS', usernameVariable: 'USER_NAME')]) {
       				    // If the organization is "mchpTestArea" change the visibility to public before deploy
