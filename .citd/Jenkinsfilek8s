@@ -22,7 +22,7 @@ pipeline {
 		//Update this URL based on where(which organization) it needs to be deployed
 		GITHUB_URL ='https://github.com/mchpTestArea'
 		//This is the BitBucket repo URL which we want to deploy
-		BITBUCKET_URL = 'https://bitbucket.microchip.com/scm/mcu16ce/pic24f-hello-world-uart.git'	
+		BITBUCKET_URL = 'https://bitbucket.microchip.com/scm/citd/sandbox_repo.git'	
 		//Flag to decide the repo visibility.
 		VISIBILITY_FLAG = true
 		GITHUB_CREDENTIAL_ID = 'GITHUB_PIC_AVR_TEST_TOKEN'
