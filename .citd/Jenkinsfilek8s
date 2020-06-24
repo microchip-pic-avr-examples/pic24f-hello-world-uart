@@ -6,15 +6,27 @@ pipeline {
             yamlFile '.citd/cloudprovider.yml'
         }
     }
+   
+   parameters {
+        booleanParam( name: 'REPO_VISIBILITY',
+            defaultValue: true,
+            description: "Visibility of GitHub repository.")
+			
+		booleanParam( name: 'IS_TESTING_AREA',
+            defaultValue: false,
+            description: "Flag to identify whether we are testing using test area or actual deployment.")
+    }
 
-	environment {		
-	    NOTIFICATION_EMAIL = 'e50beea8.microchip.com@amer.teams.ms'
+	environment {
+	    NOTIFICATION_EMAIL = 'e50beea8.microchip.com@amer.teams.ms'	
+		//Update this URL based on where(which organization) it needs to be deployed
 		GITHUB_URL ='https://github.com/mchpTestArea'
-		BITBUCKET_URL = 'https://bitbucket.microchip.com/scm/mcu16ce/pic24f-hello-world-uart.git'
-		DEPLOY_TOOL_URL = 'https://bitbucket.microchip.com/scm/citd/tool-github-deploy.git'
+		//This is the BitBucket repo URL which we want to deploy
+		BITBUCKET_URL = 'https://bitbucket.microchip.com/scm/citd/sandbox_repo.git'	
 		GITHUB_CREDENTIAL_ID = 'GITHUB_PIC_AVR_TEST_TOKEN'
 		CHANGE_LOG_PATH = 'changelog.md'
 		SOURCE_PROJECT_META_DATA = '.main-meta/main.json'
+		DEPLOY_TOOL_URL = 'https://bitbucket.microchip.com/scm/citd/tool-github-deploy.git'
 	}
 
     options {
@@ -39,14 +51,8 @@ pipeline {
             }
         }
 	   
-	   
+	    // Cloning the tool used for GitHub deployment
 	   	stage('GitHub tool clone'){
-		    when { 
-                not { changeRequest() }
-                anyOf {                     
-                    branch 'master' 
-                }
-            }
             steps{
                script{
                     execute("git clone https://bitbucket.microchip.com/scm/citd/tool-github-deploy.git")
@@ -55,33 +61,76 @@ pipeline {
             }
         } 
 		
-	
-		stage('GitHub Deploy Source'){
-		    when { 
-                not { changeRequest() }
-                anyOf {                     
-                    branch 'master' 
+	    // GitHub repo creation 
+	    stage('GitHub Repo Creation'){
+			when {
+                    anyOf {
+                        expression { env.GITHUB_URL.contains('mchpTestArea') } 
+                        allOf {
+                            not { changeRequest() }
+                            branch 'master'
+                        }
+                    }
+            }
+            steps{
+                script{
+                    def jsonObj = readJsonObject();
+                    
+                    String [] topics = jsonObj.content.keywords
+                    def asString = topics.join(", ")
+                    asString = asString.replace("\n", "").replace(" ", "").replace("\t", "").replace("\r", "")
+					// If the organization is other than 'mchpTestArea" create the repo with public visibility.
+					expression { params.REPO_VISIBILITY = env.GITHUB_URL.contains('mchpTestArea') }
+                    
+                    withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIAL_ID}", passwordVariable: 'PASS', usernameVariable: 'USER_NAME')]) {
+                        execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -rpo=true -gpat=$PASS -rporg=${env.GITHUB_URL} -rpn=${jsonObj.content.projectName} -rpd=\"${jsonObj.content.shortDescription}\" -rpt=${asString} -rpp=${params.REPO_VISIBILITY}")
+                    }
                 }
+            }
+        } 
+	
+	    // Deploying the code to GitHub 
+		stage('GitHub Deploy Source'){
+			when {
+                    anyOf {
+                        expression { env.GITHUB_URL.contains('mchpTestArea') } 
+                        allOf {
+                            not { changeRequest() }
+                            branch 'master'
+                        }
+                    }
             }
             steps{
                 script{
                     def jsonObj = readJsonObject();
                     def gitHubUrl = "${env.GITHUB_URL}" + "/" + jsonObj.content.projectName
                     gitHubUrl = gitHubUrl.replace(" ", "").replace("\n", "")
-
+					expression { params.IS_TESTING_AREA = env.GITHUB_URL.contains('mchpTestArea') }
+                    
                     withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIAL_ID}", passwordVariable: 'PASS', usernameVariable: 'USER_NAME')]) {
-                        execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -deploy=true -gpat=$PASS -dgid=$USER_NAME -dburl=${env.BITBUCKET_URL} -dgurl=${gitHubUrl}  -dbranch=develop")
+      				    // If the organization is "mchpTestArea" change the visibility to public before deploy
+						if(params.IS_TESTING_AREA == true)
+                        execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -rpu=true -gpat=$PASS -rporg=${env.GITHUB_URL} -rpn=${jsonObj.content.projectName} -rpp=false")
+					    
+                        execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -deploy=true -gpat=$PASS -dgid=$USER_NAME -dburl=${env.BITBUCKET_URL} -dgurl=${gitHubUrl}  -dbranch=master")
+						// If the organization is "mchpTestArea" change the visibility to private after deploy
+						if(params.IS_TESTING_AREA == true)
+                        execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -rpu=true -gpat=$PASS -rporg=${env.GITHUB_URL} -rpn=${jsonObj.content.projectName} -rpp=true")
                     }
                 }
             }
         }
 		
+		// Creating GitHub release  
 		stage('GitHub release'){
-		    when { 
-                not { changeRequest() }
-                anyOf {                     
-                    branch 'master' 
-                }
+			when {
+                    anyOf {
+                        expression { env.GITHUB_URL.contains('mchpTestArea') } 
+                        allOf {
+                            not { changeRequest() }
+                            branch 'master'
+                        }
+                    }
             }
             steps{
                script{
