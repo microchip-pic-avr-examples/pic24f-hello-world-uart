@@ -108,14 +108,18 @@ pipeline {
                     
                     withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIAL_ID}", passwordVariable: 'PASS', usernameVariable: 'USER_NAME')]) {
       				    // If the organization is "mchpTestArea" change the visibility to public before deploy
-						if(env.VISIBILITY_FLAG == true)
-                        execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -rpu=true -gpat=$PASS -rporg=${env.GITHUB_URL} -rpn=${jsonObj.content.projectName} -rpp=false")
+						if(env.VISIBILITY_FLAG == 'true')
+						{
+                            execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -rpu=true -gpat=$PASS -rporg=${env.GITHUB_URL} -rpn=${jsonObj.content.projectName} -rpp=false")
+						}
 					    
                         execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -deploy=true -gpat=$PASS -dgid=$USER_NAME -dburl=${env.BITBUCKET_URL} -dgurl=${gitHubUrl}  -dbranch=master")
 						
 						// If the organization is "mchpTestArea" change the visibility to private after deploy
-						if(env.VISIBILITY_FLAG == true)
-                        execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -rpu=true -gpat=$PASS -rporg=${env.GITHUB_URL} -rpn=${jsonObj.content.projectName} -rpp=true")
+						if(env.VISIBILITY_FLAG == 'true')
+						{
+                            execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -rpu=true -gpat=$PASS -rporg=${env.GITHUB_URL} -rpn=${jsonObj.content.projectName} -rpp=true")
+						}
                     }
                 }
             }
