@@ -58,12 +58,10 @@ pipeline {
         success{
             script {
                 if (!"${env.CHANGE_AUTHOR_EMAIL}".equalsIgnoreCase("null")) {
-				    archiveArtifacts artifacts: "tool-mplabx-c-build/output/**", fingerprint: true
                     mail to: "${env.CHANGE_AUTHOR_EMAIL}, ${env.NOTIFICATION_EMAIL}",
                     subject: "Successful Pipeline: ${currentBuild.fullDisplayName}",
                     body: "Something is right with ${env.BUILD_URL}"
                 } else {
-				    archiveArtifacts artifacts: "tool-mplabx-c-build/output/**", fingerprint: true
                     mail to: "${env.NOTIFICATION_EMAIL}",
                     subject: "Successful Pipeline: ${currentBuild.fullDisplayName}",
                     body: "Something is right with ${env.BUILD_URL}"
@@ -73,12 +71,10 @@ pipeline {
         failure {
             script {
                 if (!"${env.CHANGE_AUTHOR_EMAIL}".equalsIgnoreCase("null")) {
-				    archiveArtifacts artifacts: "tool-mplabx-c-build/output/**", fingerprint: true
                     mail to: "${env.CHANGE_AUTHOR_EMAIL}, ${env.NOTIFICATION_EMAIL}",
                     subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
                     body: "Pipeline failure. ${env.BUILD_URL}"
                 } else {
-				    archiveArtifacts artifacts: "tool-mplabx-c-build/output/**", fingerprint: true
                     mail to: "${env.NOTIFICATION_EMAIL}",
                     subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
                     body: "Pipeline failure. ${env.BUILD_URL}"
