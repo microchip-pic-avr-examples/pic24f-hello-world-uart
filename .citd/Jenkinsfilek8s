@@ -15,7 +15,7 @@ pipeline {
 		//This is the BitBucket repo URL which we want to deploy
 		BITBUCKET_URL = 'https://bitbucket.microchip.com/scm/mcu16ce/pic24f-hello-world-uart.git'	
 		GITHUB_CREDENTIAL_ID = 'GITHUB_PIC_AVR_TEST_TOKEN'
-		CHANGE_LOG_PATH = 'changelog.md'
+		CHANGE_LOG_PATH = 'deploy_sandbox/changelog.md'
 		SOURCE_PROJECT_META_DATA = '.main-meta/main.json'
 		DEPLOY_TOOL_URL = 'https://bitbucket.microchip.com/scm/citd/tool-github-deploy.git'
 	}
