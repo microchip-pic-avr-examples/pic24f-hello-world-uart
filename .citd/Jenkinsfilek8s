@@ -10,13 +10,13 @@ pipeline {
 
 	environment {
 	    NOTIFICATION_EMAIL = 'e50beea8.microchip.com@amer.teams.ms'	
-		//Update this URL based on where(which organization) it needs to be deployed
-		GITHUB_URL ='https://github.com/mchpTestArea'
 		//This is the BitBucket repo URL which we want to deploy
 		BITBUCKET_URL = 'https://bitbucket.microchip.com/scm/mcu16ce/pic24f-hello-world-uart.git'	
+		//Update this URL based on where(which organization) it needs to be deployed
+		GITHUB_URL ='https://github.com/mchpTestArea'
+		GITHUB_CREDENTIAL_ID = 'GITHUB_PIC_AVR_TEST_TOKEN'
 		//Branch to be deployed, if multiple branches use comma separated string
 		DEPLOY_BRANCH = "master"
-		GITHUB_CREDENTIAL_ID = 'GITHUB_PIC_AVR_TEST_TOKEN'
 		CHANGE_LOG_PATH = 'deploy_sandbox/changelog.md'
 		SOURCE_PROJECT_META_DATA = '.main-meta/main.json'
 		DEPLOY_TOOL_URL = 'https://bitbucket.microchip.com/scm/citd/tool-github-deploy.git'
