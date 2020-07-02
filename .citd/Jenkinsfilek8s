@@ -101,26 +101,9 @@ pipeline {
                     def jsonObj = readJsonObject();
                     def gitHubUrl = "${env.GITHUB_URL}" + "/" + jsonObj.content.projectName
                     gitHubUrl = gitHubUrl.replace(" ", "").replace("\n", "")
-					Boolean visibility =  true
-					if(env.GITHUB_URL.contains('microchip-pic-avr-examples'))
-					{
-					   visibility = false
-					}
                     
                     withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIAL_ID}", passwordVariable: 'PASS', usernameVariable: 'USER_NAME')]) {
-      				    // If the organization is "mchpTestArea" change the visibility to public before deploy
-						if(visibility == true)
-						{
-                            execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -rpu=true -gpat=$PASS -rporg=${env.GITHUB_URL} -rpn=${jsonObj.content.projectName} -rpp=false")
-						}
-					    
                         execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -deploy=true -gpat=$PASS -dgid=$USER_NAME -dburl=${env.BITBUCKET_URL} -dgurl=${gitHubUrl}  -dbranch=${env.DEPLOY_BRANCH}")
-						
-						// If the organization is "mchpTestArea" change the visibility to private after deploy
-						if(visibility == true)
-						{
-                            execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -rpu=true -gpat=$PASS -rporg=${env.GITHUB_URL} -rpn=${jsonObj.content.projectName} -rpp=true")
-						}
                     }
                 }
             }
