@@ -10,13 +10,16 @@ pipeline {
 
 	environment {
 	    NOTIFICATION_EMAIL = 'e50beea8.microchip.com@amer.teams.ms'	
-		//This is the BitBucket repo URL which we want to deploy
-		BITBUCKET_URL = 'https://bitbucket.microchip.com/scm/mcu16ce/pic24f-hello-world-uart.git'	
-		//Update this URL based on where(which organization) it needs to be deployed
-		GITHUB_URL ='https://github.com/mchpTestArea'
-		GITHUB_CREDENTIAL_ID = 'GITHUB_PIC_AVR_TEST_TOKEN'
 		//Branch to be deployed, if multiple branches use comma separated string
-		DEPLOY_BRANCH = "master"
+		DEPLOY_BRANCH = "${env.BRANCH_NAME}"
+		//This is the BitBucket repo URL which we want to deploy
+		BITBUCKET_URL = 'https://bitbucket.microchip.com/scm/mcu16ce/pic24f-hello-world-uart.git'
+        //URL of actual production deployment		
+		GITHUB_PRODUCTION_DEPLOY_URL ='https://github.com/microchip-pic-avr-examples'
+		//URL for test deployment
+		GITHUB_TEST_DEPLOY_URL ='https://github.com/mchpTestArea'
+		GITHUB_URL = "${env.BRANCH_NAME == 'master' ? env.GITHUB_PRODUCTION_DEPLOY_URL : env.GITHUB_TEST_DEPLOY_URL}"
+		GITHUB_CREDENTIAL_ID = 'GITHUB_PIC_AVR_TEST_TOKEN'
 		CHANGE_LOG_PATH = 'deploy_sandbox/changelog.md'
 		SOURCE_PROJECT_META_DATA = '.main-meta/main.json'
 		DEPLOY_TOOL_URL = 'https://bitbucket.microchip.com/scm/citd/tool-github-deploy.git'
@@ -46,6 +49,14 @@ pipeline {
 	   
 	    // Cloning the tool used for GitHub deployment
 	   	stage('GitHub tool clone'){
+			when {
+                    anyOf {
+                        allOf {
+                            not { changeRequest() }
+                            anyOf {branch 'master'; branch 'test_deploy';}
+                        }
+                    }
+            }
             steps{
                script{
                     execute("git clone https://bitbucket.microchip.com/scm/citd/tool-github-deploy.git")
@@ -58,10 +69,9 @@ pipeline {
 	    stage('GitHub Repo Creation'){
 			when {
                     anyOf {
-                        expression { !env.GITHUB_URL.contains('microchip-pic-avr-examples') } 
                         allOf {
                             not { changeRequest() }
-                            branch 'master'
+                            anyOf {branch 'master'; branch 'test_deploy';}
                         }
                     }
             }
@@ -89,10 +99,9 @@ pipeline {
 		stage('GitHub Deploy Source'){
 			when {
                     anyOf {
-                        expression { !env.GITHUB_URL.contains('microchip-pic-avr-examples') } 
                         allOf {
                             not { changeRequest() }
-                            branch 'master'
+                            anyOf {branch 'master'; branch 'test_deploy';}
                         }
                     }
             }
@@ -113,10 +122,9 @@ pipeline {
 		stage('GitHub release'){
 			when {
                     anyOf {
-                        expression { !env.GITHUB_URL.contains('microchip-pic-avr-examples') } 
                         allOf {
                             not { changeRequest() }
-                            branch 'master'
+                            anyOf {branch 'master'; branch 'test_deploy';}
                         }
                     }
             }
