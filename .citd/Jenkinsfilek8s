@@ -14,6 +14,7 @@ pipeline {
 		DEPLOY_BRANCH = "${env.BRANCH_NAME}"
 		//This is the BitBucket repo URL which we want to deploy
 		BITBUCKET_URL = 'https://bitbucket.microchip.com/scm/mcu16ce/pic24f-hello-world-uart.git'
+		BITBUCKET_CREDENTIAL_ID = 'BITBUCKET_ACCESS_TOKEN'
         //URL of actual production deployment		
 		GITHUB_PRODUCTION_DEPLOY_URL ='https://github.com/microchip-pic-avr-examples'
 		//URL for test deployment
@@ -64,6 +65,27 @@ pipeline {
                 }
             }
         } 
+		
+		// Creating tag in Bitbucket repo
+	   	stage('Bitbucket Tag Creation'){
+			when {
+                    anyOf {
+                        allOf {
+                            not { changeRequest() }
+                            anyOf {branch 'master'; branch 'test_deploy';}
+                        }
+                    }
+            }
+            steps{
+               script{
+                    def jsonObj = readJsonObject();
+                    
+                    withCredentials([usernamePassword(credentialsId: "${env.BITBUCKET_CREDENTIAL_ID}", passwordVariable: 'PASS', usernameVariable: 'USER_NAME')]) {
+                        execute("python tool-github-deploy/tool-github-deploy/tool-github-deploy.py -bto=true -rpn=\"${jsonObj.content.projectName}\" -bid=$USER_NAME -bpat=$PASS -bpn=MCU16CE -btv=\"${jsonObj.content.version}\" -bch=${env.GIT_COMMIT} -btd=\"v${jsonObj.content.version}\"")
+                    }
+                }
+            }
+        }
 		
 	    // GitHub repo creation 
 	    stage('GitHub Repo Creation'){
