@@ -11,7 +11,7 @@ This is a simple Hello world application which prints the string "Hello World !!
 
 ## Related Documentation
 
-PIC24FJ1024GB610 microcontroller (www.microchip.com/PIC24FJ1024GB610)
+- PIC24FJ1024GB610 microcontroller (https://www.microchip.com/PIC24FJ1024GB610)
 
 
 ## Software Used 

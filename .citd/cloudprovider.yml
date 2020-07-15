@@ -16,3 +16,15 @@ spec:
         limits:
           cpu: 2
           memory: 2Gi
+    - name: sq-docker
+      image: artifacts.microchip.com:7999/microchip/citd/sonar-scanner:4.2.0
+      imagePullPolicy: Always
+      command: ['cat']
+      tty: true
+      resources:
+        requests:
+          cpu: 750m
+          memory: 500Mi
+        limits:
+          cpu: 1
+          memory: 1Gi          
