@@ -41,17 +41,6 @@ pipeline {
             }
         }
 		
-		stage('Static-Analysis-cppcheck') {
-            steps {
-                script {
-                    execute("apt-get update -y")
-                    execute("apt-get install cppcheck -y")
-                    execute("cppcheck -v --enable=all --suppress=missingIncludeSystem --xml ./ 2> cppcheck-report.xml")
-                }
-            }
-        } 
-
-
         stage('Build') {
             steps {
                 script {
@@ -61,17 +50,6 @@ pipeline {
             }
         }
 		
-		
-		stage('SonarQube-Upload'){
-            steps {
-			container('sq-docker') {
-                    withCredentials([string(credentialsId: 'sonar.microchip', variable: 'SONAR_AUTH_TOKEN')]) {
-                        sh "sonar-scanner -X -Dsonar.host.url=http://sonar.microchip.com -Dsonar.login=$SONAR_AUTH_TOKEN"
-                    }
-				}
-            }
-        } 
-	   
 	    // Cloning the tool used for GitHub deployment
 	   	stage('GitHub tool clone'){
 			when {
