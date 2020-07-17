@@ -45,7 +45,7 @@
 /**
   Section: Included Files
 */
-#include "src/system.h"
+#include "mcc_generated_files/system.h"
 #include <stdio.h>
 
 /*

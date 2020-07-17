@@ -3,8 +3,6 @@
  
 ## PIC24F Hello World UART
 
-![image](images/explorer16_32_dev_board.jpg)
-
 ## Summary
 
 This is a simple Hello world application which prints the string "Hello World !!!" continuously on the serial terminal.
