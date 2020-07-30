@@ -161,6 +161,34 @@ pipeline {
                 }
             }
         }
+		
+		//Deploying the Github content to portal
+		stage('Portal-Deploy') {
+			when {
+				allOf {
+                    not { changeRequest() }
+                    anyOf {branch 'master';}
+                }
+			}
+			steps {
+				script {
+					def jsonObj = readJsonObject();			
+					def version = jsonObj.content.version
+					def project = jsonObj.content.projectName
+					
+                    String[] splitPreTag = "${env.GITHUB_URL}".split("/")
+                    def gitHubOrg = (splitPreTag[splitPreTag.size() - 1])
+
+					def cmdArgs = "'{\"repoOwnerName\":\"$gitHubOrg\",\"repoName\":\"$project\",\"tagName\":\"$version\"}'"
+					cmdArgs = cmdArgs.replaceAll("\"","\\\\\"")						
+					
+					execute("git clone https://bitbucket.microchip.com/scm/portal/bundles.git")
+					execute("cd bundles && chmod 755 ./portal-client-cli-linux")
+					execute("git clone https://bitbucket.microchip.com/scm/citd/tool-portal-client-launcher.git")
+					execute("cd tool-portal-client-launcher && node portalLauncher.js -app=../bundles/portal-client-cli-linux -cmd=\"uploadGitHub ${cmdArgs}\"")
+				}
+			}
+		}
         
       }
 

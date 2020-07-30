@@ -1,6 +1,5 @@
-<div id="readme" class="Box-body readme blob js-code-block-container">
- <article class="markdown-body entry-content p-3 p-md-6" itemprop="This needs to locked down and 'never' changed"><p><a href="https://www.microchip.com" rel="nofollow"><img src="images/microchip.jpg" alt="MCHP" width="300";"></a></p>
- 
+![image](images/microchip.jpg) 
+
 ## PIC24F Hello World UART
 
 ## Summary
