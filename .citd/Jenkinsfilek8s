@@ -15,11 +15,11 @@ pipeline {
 		BITBUCKET_CREDENTIAL_ID = 'BITBUCKET_INTERNAL_TOKEN'
 		GITHUB_PRODUCTION_DEPLOY_URL ='https://github.com/microchip-pic-avr-examples'
 		GITHUB_TEST_DEPLOY_URL ='https://github.com/mchpTestArea'
-		//Selects the deployment URL(production or test) based on the merge target branch, selects "microchip-pic-avr-examples" if target branch is "master" else selects "mchpTestArea"
-		GITHUB_URL = "${env.BRANCH_NAME == 'master' ? env.GITHUB_PRODUCTION_DEPLOY_URL : env.GITHUB_TEST_DEPLOY_URL}"
-		GITHUB_CREDENTIAL_ID = 'GITHUB_PIC_AVR_TEST_TOKEN'
-		GITHUB_PRODUCTION_DEPLOY_CREDENTIAL_ID=''
-		GITHUB_TEST_DEPLOY_CREDENTIAL_ID=''
+		//Selects the deployment URL(production or test) based on the merge target branch, selects "microchip-pic-avr-examples" if target branch is "master" , if target branch is "test_deploy" selects "mchpTestArea"
+		GITHUB_URL = ("${env.BRANCH_NAME" == "master") ? GITHUB_PRODUCTION_DEPLOY_URL : ("${env.BRANCH_NAME" == "test_deploy") ? GITHUB_TEST_DEPLY_URL : null
+		GITHUB_PRODUCTION_DEPLOY_CREDENTIAL_ID='GITHUB_MICROCHIP_PIC_AVR_EXAMPLES_TOKEN'
+		GITHUB_TEST_DEPLOY_CREDENTIAL_ID='GITHUB_PIC_AVR_TEST_TOKEN'
+	    GITHUB_CREDENTIAL_ID = ("${env.BRANCH_NAME" == "master") ? GITHUB_PRODUCTION_DEPLOY_CREDENTIAL_ID : ("${env.BRANCH_NAME" == "test_deploy") ? GITHUB_TEST_DEPLOY_CREDENTIAL_ID : null
 		//Files or folders to be excluded from deployment, if multiple files or folders use comma separator
 		DEPLOY_EXCLUDE_FOLDER_FILE_LIST = 'mchp_private'
 		//Branch(s) to be deployed, if multiple branches use comma separator. ${env.BRANCH_NAME} is the target branch of the PR.
@@ -45,6 +45,8 @@ pipeline {
         stage('Build') {
             steps {
                 script {
+				   echo "${env.GITHUB_URL}" 
+				   echo "${env.GITHUB_CREDENTIAL_ID}" 
                    execute("git clone https://bitbucket.microchip.com/scm/citd/tool-mplabx-c-build.git")
                    execute("cd ./tool-mplabx-c-build && node buildLauncher.js sp=../ rp=./output genMK=true")
                }
