@@ -17,8 +17,8 @@ pipeline {
 		GITHUB_TEST_DEPLOY_URL ='https://github.com/mchpTestArea'
 		//Selects the deployment URL(production or test) based on the merge target branch, selects "microchip-pic-avr-examples" if target branch is "master" , if target branch is "test_deploy" selects "mchpTestArea" else null
 		GITHUB_URL = getGitHubUrl("${GITHUB_PRODUCTION_DEPLOY_URL}","${GITHUB_TEST_DEPLOY_URL}")
-		GITHUB_PRODUCTION_DEPLOY_CREDENTIAL_ID='GITHUB_MICROCHIP_PIC_AVR_EXAMPLES_TOKEN'
-		GITHUB_TEST_DEPLOY_CREDENTIAL_ID='GITHUB_PIC_AVR_TEST_TOKEN'
+		GITHUB_PRODUCTION_DEPLOY_CREDENTIAL_ID ='GITHUB_MICROCHIP_PIC_AVR_EXAMPLES_TOKEN'
+		GITHUB_TEST_DEPLOY_CREDENTIAL_ID ='GITHUB_PIC_AVR_TEST_TOKEN'
 		PRODUCTION_DEPLOY_ORG = 'microchip-pic-avr-examples'
 		TEST_DEPLOY_ORG = 'mchpTestArea'
 		//Gets the Github credential id based on the deployment organization
