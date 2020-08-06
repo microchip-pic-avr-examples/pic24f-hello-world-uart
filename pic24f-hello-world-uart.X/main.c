@@ -13,11 +13,11 @@
   @Description
     This source file provides main entry point for system initialization and application code development.
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
-        Device            :  PIC24FJ128GB110
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.168.0
+        Device            :  PIC24FJ1024GB610
     The generated drivers are tested against the following:
         Compiler          :  XC16 v1.50
-        MPLAB 	          :  MPLAB X v5.35
+        MPLAB 	          :  MPLAB X v5.40
 */
 
 /*

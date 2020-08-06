@@ -13,11 +13,11 @@
   @Description
     This header file provides APIs for driver for UART1. 
     Generation Information : 
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.168.0
         Device            :  PIC24FJ1024GB610
     The generated drivers are tested against the following:
         Compiler          :  XC16 v1.50
-        MPLAB             :  MPLAB X v5.35
+        MPLAB             :  MPLAB X v5.40
 */
 
 /*
@@ -186,7 +186,7 @@ bool UART1_IsTxDone(void);
         UART1_SetTxInterruptHandler(&UART1_Transmit_CallBack);
     </code>
 */
-void UART1_SetTxInterruptHandler(void* handler);
+void UART1_SetTxInterruptHandler(void (* interruptHandler)(void));
 
 /**
   @Summary
@@ -226,7 +226,7 @@ void UART1_Transmit_CallBack(void);
         UART1_SetRxInterruptHandler(&UART1_Receive_CallBack);
     </code>
 */
-void UART1_SetRxInterruptHandler(void* handler);
+void UART1_SetRxInterruptHandler(void (* interruptHandler)(void));
 
 /**
   @Summary

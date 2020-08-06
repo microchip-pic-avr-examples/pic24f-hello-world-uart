@@ -13,11 +13,11 @@
   @Description
     This source file provides APIs for driver for UART1. 
     Generation Information : 
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.168.0
         Device            :  PIC24FJ1024GB610
     The generated drivers are tested against the following:
         Compiler          :  XC16 v1.50
-        MPLAB             :  MPLAB X v5.35
+        MPLAB             :  MPLAB X v5.40
 */
 
 /*
@@ -137,15 +137,15 @@ void UART1_Initialize(void)
     Maintains the driver's transmitter state machine and implements its ISR
 */
 
-void UART1_SetTxInterruptHandler(void* handler)
+void UART1_SetTxInterruptHandler(void (* interruptHandler)(void))
 {
-    if(handler == NULL)
+    if(interruptHandler == NULL)
     {
         UART1_TxDefaultInterruptHandler = &UART1_Transmit_CallBack;
     }
     else
     {
-        UART1_TxDefaultInterruptHandler = handler;
+        UART1_TxDefaultInterruptHandler = interruptHandler;
     }
 } 
 
@@ -184,15 +184,15 @@ void __attribute__ ((weak)) UART1_Transmit_CallBack ( void )
 
 }
 
-void UART1_SetRxInterruptHandler(void* handler)
+void UART1_SetRxInterruptHandler(void (* interruptHandler)(void))
 {
-    if(handler == NULL)
+    if(interruptHandler == NULL)
     {
         UART1_RxDefaultInterruptHandler = &UART1_Receive_CallBack;
     }
     else
     {
-        UART1_RxDefaultInterruptHandler = handler;
+        UART1_RxDefaultInterruptHandler = interruptHandler;
     }
 }
 
