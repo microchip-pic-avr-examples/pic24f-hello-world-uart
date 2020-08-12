@@ -1,0 +1,42 @@
+{
+  "metaDataVersion": "1.0.0",
+  "category": "com.microchip.ide.project",
+  "content": {
+    "metaDataVersion": "1.0.0",
+    "name": "com.microchip.mplabx.project.pic24f-hello-world-uart",
+    "version": "1.0.0",
+    "displayName": "PIC24F Hello World UART",
+    "projectName": "pic24f-hello-world-uart",
+    "shortDescription": "PIC24F Hello World UART Example",
+	"ide": {
+		"name": "MPLABX",
+		"semverRange": ">=5.40.0"
+	},
+	"compiler": {
+		"name": "XC16",
+		"semverRange": "^1.50.0"
+	},
+	"dfp": {
+		"name": "PIC24F-GA-GB_DFP",
+		"semverRange": "^1.0.41"
+	},
+	"device": {
+		"metaDataVersion": "1.0.0",
+		"category": "com.microchip.portal.contentRef",
+		"content": {
+			"metaDataVersion": "1.0.0",
+			"category": "com.microchip.device",
+			"name": "PIC24FJ1024GB610",
+			"versionRange": "*"
+		}
+	},
+	"peripherals": [
+		"GPIO",
+		"UART"
+	],
+	"keywords": [
+		"GPIO",
+		"UART"
+	]
+  }
+}
