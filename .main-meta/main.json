@@ -3,14 +3,14 @@
   "category": "com.microchip.ide.project",
   "content": {
     "metaDataVersion": "1.0.0",
-    "name": "com.microchip.mplabx.project.project",
+    "name": "com.microchip.mplabx.project.pic24f-hello-world-uart",
     "version": "1.0.0",
-    "displayName": "PIC24F Hello World",
+    "displayName": "PIC24F Hello World UART",
     "projectName": "pic24f-hello-world-uart",
-    "shortDescription": "PIC24F Hello World Example",
+    "shortDescription": "PIC24F Hello World UART Example",
 	"ide": {
 		"name": "MPLABX",
-		"semverRange": ">=5.35.0"
+		"semverRange": ">=5.40.0"
 	},
 	"compiler": {
 		"name": "XC16",
@@ -30,14 +30,6 @@
 			"versionRange": "*"
 		}
 	},
-	"subcategories":[
-		"Hello World",
-		[
-			"Peripherals",
-			"GPIO",
-			"UART"
-		]
-	],
 	"peripherals": [
 		"GPIO",
 		"UART"
