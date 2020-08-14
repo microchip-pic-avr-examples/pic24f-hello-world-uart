@@ -38,11 +38,3 @@ Users will see the string "Hello World !!!" being continuously printed on the se
 ![image](images/hardware_connections.jpg)
 
 ![image](images/serial_terminal.jpg)
-
-
-
-- - - 
-
-© 2020, Microchip Technology Inc.
-
-
